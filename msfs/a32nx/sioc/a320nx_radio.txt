@@ -1,0 +1,947 @@
+var 0,value 0
+{
+  &d_bright = 255  // Control de brillo
+
+  &ent_com1 = 118
+  &dec_com1 = 0
+  &act_com1 = 118000
+  &enc_com1 = 0
+
+  &ent_com2 = 118
+  &dec_com2 = 0
+  &act_com2 = 118000
+  &enc_com2 = 0
+
+  &ent_nav1 = 108
+  &dec_nav1 = 0
+  &scourse1 = 0
+  &enc_nav1 = 0
+
+  &ent_nav2 = 108
+  &dec_nav2 = 0
+  &scourse2 = 0
+  &enc_nav2 = 0
+
+  &ent_adf1 = 10
+  &dec_adf1 = 0
+  &enc_adf1 = 0
+}
+
+Var 1, name D_BRIGHT, Link IOCARD_DISPLAY, Digit 16, Numbers 3
+
+// ****** ENCENDIDO ******
+
+Var 3, name i_on, Link IOCARD_SW, Input 13, device 0
+{
+  if &i_on = 1 
+  {
+    &enc_com1 = 1
+  }
+  else
+  {
+    &enc_com1 = 0
+    &enc_com2 = 0
+    &enc_nav1 = 0
+    &enc_nav2 = 0
+    &enc_adf1 = 0
+  }    
+}
+
+Var 5, name i_vhf1, Link IOCARD_SW, Input 5, device 0
+{
+  if &i_on = 1
+  {
+    if &enc_com1 = 0
+    {
+      &enc_nav1 = 0
+      &enc_nav2 = 0
+      &enc_adf1 = 0
+      &enc_com2 = 0
+      &enc_com1 = 1
+    }
+  }
+}
+
+Var 7, name i_vor, Link IOCARD_SW, Input 9,device 0
+{
+  if &i_on = 1
+  {
+    if &enc_nav1 = 0
+    {
+      if &o_nav = 1
+      {
+        &enc_com1 = 0
+        &enc_com2 = 0
+        &enc_nav2 = 0
+    	&enc_adf1 = 0
+        &enc_nav1 = 1
+      }
+    }
+  }
+}
+
+Var 9, name i_nav, Link IOCARD_SW, Input 7,device 0
+{
+  if &i_on = 1
+  {
+    if &o_nav = 0
+    {
+      &o_nav = 1	
+      &enc_com1 = 0
+      &enc_com2 = 0
+      &enc_nav2 = 0
+      &enc_adf1 = 0
+      &enc_nav1 = 1
+    }
+  }
+}
+
+Var 11, name i_vhf2, Link IOCARD_SW, Input 6, device 0
+{
+  if &i_on = 1
+  {
+    if &enc_com2 = 0
+    {
+      &enc_nav1 = 0
+      &enc_nav2 = 0
+      &enc_com1 = 0
+      &enc_adf1 = 0
+      &enc_com2 = 1
+    }
+  }
+}
+
+
+Var 13, name i_ils, Link IOCARD_SW, Input 10,device 0
+{
+  if &i_on = 1
+  {
+    if &enc_nav2 = 0
+    {
+      if &o_nav = 1
+      {
+        &enc_com1 = 0
+        &enc_com2 = 0
+        &enc_nav1 = 0
+        &enc_adf1 = 0
+        &enc_nav2 = 1
+      }
+    }
+  }
+}
+
+Var 15, name i_adf, Link IOCARD_SW, Input 11,device 0
+{
+  if &i_on = 1
+  {
+    if &enc_adf1 = 0
+    {
+      if &o_nav = 1
+      {
+        &enc_com1 = 0
+        &enc_com2 = 0
+        &enc_nav1 = 0
+        &enc_nav2 = 0
+        &enc_adf1 = 1
+      }
+    }
+  }
+}
+
+var 17, name scourse1
+{
+  if &scourse1 = 1
+  {
+    &fix11 = -999998
+    &fix21 = -999997
+    &dcourse1 = &course1
+    &io_pt2_nav1 = 0
+  }
+  else
+  {
+    &fix11 = -999999
+    &fix21 = -999999
+    &dcourse1 = -999999
+    &io_pt2_nav1 = 1
+  }
+}
+
+var 19, name fix11,link IOCARD_DISPLAY, digit 9, numbers 1, device 0
+
+var 21, name fix21,link IOCARD_DISPLAY, digit 10, numbers 1, device 0 
+
+var 23, name dcourse1,link IOCARD_DISPLAY, digit 6, numbers 3, device 0
+
+var 25, name scourse2
+{
+  if &scourse2 = 1
+  {
+    &fix12 = -999998
+    &fix22 = -999997
+    &dcourse2 = &course2
+    &io_pt2_nav2 = 0
+  }
+  else
+  {
+    &fix12 = -999999
+    &fix22 = -999999
+    &dcourse2 = -999999
+    &io_pt2_nav2 = 1
+  }
+}
+
+var 27, name fix12,link IOCARD_DISPLAY, digit 9, numbers 1, device 0
+
+var 29, name fix22,link IOCARD_DISPLAY, digit 10, numbers 1, device 0 
+
+var 31, name dcourse2,link IOCARD_DISPLAY, digit 6, numbers 3, device 0
+
+// ******************************** COM1 **********************
+
+var 2, name enc_com1
+{
+  if &enc_com1 = 1
+  {
+   &io_pt_com1 = 1
+   &io_pt2_com1 = 1
+   call &sub_d_com1
+   &id2_com1 = &act_com1
+   &o_vhf1 = 1
+  }
+  else
+  {
+   &io_pt_com1 = 0
+   &io_pt2_com1 = 0
+   &id_com1 = -999999
+   &id2_com1 = -999999
+   &o_vhf1 = 0
+  }
+}
+
+var 4, name ent_com1
+
+var 6, name dec_com1
+
+var 8, name ie_dec_com1, link IOCARD_ENCODER, input 0, type 2, aceleration 1, device 0
+{
+  if &enc_com1 = 1
+  {
+    l0 = &ie_dec_com1 * 5
+    l1 = &dec_com1 + l0
+    if l1 < 0
+    {
+      l1 = 995
+    }
+    if l1 > 995
+    {
+      l1 = 0
+    }
+    &dec_com1 = l1
+    call &sub_d_com1
+  }
+}
+
+var 10, name ie_ent_com1, link IOCARD_ENCODER, input 2, type 2, aceleration 1, device 0
+{
+  if &enc_com1 = 1
+  {
+    l0 = &ie_ent_com1 * -1
+    &ent_com1 = rotate 118,135,l0
+    call &sub_d_com1
+  }
+}
+
+var 12, name id_com1,link IOCARD_DISPLAY, digit 6, numbers 6, device 0
+
+var 14, name sub_d_com1, link SUBRUTINE
+{
+  l0 = &ent_com1 * 1000
+  &id_com1 = l0 + &dec_com1
+}
+
+var 16, name io_pt_com1, link IOCARD_OUT, output 21, device 0
+
+var 18, name ii_sw_com1, link IOCARD_SW, input 4, device 0
+{
+  if &ii_sw_com1 = 1
+  {
+    if &enc_com1 = 1
+    {
+      l0 = &ent_com1 * 1000
+      l0 = l0 + &dec_com1
+      l1 = div &act_com1 1000
+      l2 = mod &act_com1 1000
+      &act_com1 = l0
+      &ent_com1 = l1
+      &dec_com1 = l2
+      call &sub_d_com1
+      &id2_com1 = &act_com1 
+    }
+  }
+}
+
+var 20, name act_com1
+
+var 22, name id2_com1,link IOCARD_DISPLAY, digit 0, numbers 6, device 0
+{
+  if &id2_com1 > 0
+  {
+    &xp_com1 = &id2_com1
+  }
+}
+
+var 24, name io_pt2_com1, link IOCARD_OUT, output 23, device 0
+
+var 26, name xp_com1, value 118000
+{
+  l0 = &xp_com1 * 1000
+  &fcom1 = l0
+}
+
+
+Var 28, name o_vhf1, Link IOCARD_OUT, Output 24, device 0
+
+
+// ********* OFFSETS ****
+
+Var 250, Link FSUIPC_INOUT, name fcom1, Offset $05C4, Length 4 // COM1 Active 
+
+// **** For Sync with FS
+// {
+//  l0 = frombcd &fcom1
+//  l0 = l0 * 10
+//  &act_com1 = l0 + 100000
+//  if &enc_com1 = 1
+//  {
+//    &id2_com1 = &act_com1
+//  }
+// }
+
+
+
+// *******************  NAV1 *******************
+
+var 54, name enc_nav1
+{
+  if &enc_nav1 = 1
+  {
+    &io_pt_nav1 = 1
+    &io_pt2_nav1 = 1
+    &id2_nav1 = &act_nav1
+    &o_nav = 1
+    &o_vor = 1
+    if &scourse1 = 0
+    {
+      &scourse1 = 1
+    }
+    else
+    {
+      &scourse1 = 0
+      call &sub_d_nav1
+    }   
+  }
+  else
+  {
+    &scourse1 = 0
+    &io_pt_nav1 = 0
+    &io_pt2_nav1 = 0
+    &id_nav1 = -999999
+    &id2_nav1 = -999999
+    &o_nav = 0
+    &o_vor = 0
+  }
+}
+
+var 56, name ent_nav1
+
+var 58, name dec_nav1
+
+var 60, name ie_dec_nav1, link IOCARD_ENCODER, input 0, type 2, aceleration 1, device 0
+{
+  if &enc_nav1 = 1
+  {
+    if &scourse1 = 0
+    {
+      l0 = &ie_dec_nav1 * 25
+      l1 = &dec_nav1 + l0
+      if l1 < 0
+      {
+        l1 = 975
+      }
+      if l1 > 975
+      {
+        l1 = 0
+      }
+      &dec_nav1 = l1
+      call &sub_d_nav1
+    }
+  }
+}
+
+var 62, name ie_ent_nav1, link IOCARD_ENCODER, input 2, type 2, aceleration 2, device 0
+{
+  if &enc_nav1 = 1
+  {
+    if &scourse1 = 1
+    {
+
+    }
+    else  
+    { 
+      l0 = &ie_ent_nav1 * -1
+      &ent_nav1 = rotate 108,117,l0
+      call &sub_d_nav1
+    }
+  }
+}
+
+var 63, name ie_ent_nav1b, link IOCARD_ENCODER, input 2, type 2, aceleration 8, device 0
+{
+  if &enc_nav1 = 1
+  {
+    if &scourse1 = 1
+    {
+      l0 = &ie_ent_nav1b * -1
+      &dcourse1 = rotate 0,359,l0
+    }
+    else  
+    { 
+    }
+  }
+}
+
+var 64, name id_nav1,link IOCARD_DISPLAY, digit 6, numbers 5, device 0
+
+var 66, name sub_d_nav1, link SUBRUTINE
+{
+  l0 = &ent_nav1 * 100
+  l1 = div &dec_nav1 10
+  &id_nav1 = l0 + l1
+}
+
+var 68, name io_pt_nav1, link IOCARD_OUT, output 20, device 0
+
+var 70, name ii_sw_nav1, link IOCARD_SW, input 4, device 0
+{
+  if &ii_sw_nav1 = 1
+  {
+    if &enc_nav1 = 1
+    {
+      if &scourse1 = 1
+      {
+        &course1 = &dcourse1
+        &scourse1 = 0
+    	&id_nav1 = &act_nav1
+        l2 = mod &act_nav1 100
+        l0 = mod l2 10
+        l2 = l2 * 10
+        if l0 > 0
+        {
+          l2 = l2 + 5
+        }
+        &dec_nav1 = l2
+        l1 = div &act_nav1 100
+        &ent_nav1 = l1 
+      }
+      else
+      {
+        l0 = &ent_nav1 * 100
+        l1 = div &dec_nav1 10     
+        l0 = l0 + l1
+        &act_nav1 = l0
+        &id2_nav1 = &act_nav1 
+        &id_nav1 = -999999
+        &scourse1 = 1
+      }
+    }
+  }
+}
+
+var 72, name act_nav1
+
+var 74, name id2_nav1,link IOCARD_DISPLAY, digit 0, numbers 5, device 0
+{
+  if &id2_nav1 > 0
+  {
+    &xp_nav1 = &id2_nav1
+  }
+}
+
+var 76, name io_pt2_nav1, link IOCARD_OUT, output 22, device 0
+
+var 78, name xp_nav1
+{
+  l0 = &xp_nav1 - 10000
+  &fnav1 = tobcd l0
+}
+
+Var 80, name o_nav, Link IOCARD_OUT, Output 30, device 0
+Var 82, name o_vor, Link IOCARD_OUT, Output 31, device 0
+
+// ********* OFFSETS ****
+
+Var 251, Link FSUIPC_INOUT, name fnav1, Offset $0350, Length 2 // NAV1 Active 
+{
+  l0 = frombcd &fnav1
+  &act_nav1 = l0 + 10000
+  if &enc_nav1 = 1
+  {
+    &id2_nav1 = &act_nav1
+  }
+}
+
+
+// ******************************** COM2 **********************
+
+var 102, name enc_com2
+{
+  if &enc_com2 = 1
+  {
+   &io_pt_com2 = 1
+   &io_pt2_com2 = 1
+   call &sub_d_com2
+   &id2_com2 = &act_com2
+   &o_vhf2 = 1
+   &o_sel = 1
+  }
+  else
+  {
+   &io_pt_com2 = 0
+   &io_pt2_com2 = 0
+   &id_com2 = -999999
+   &id2_com2 = -999999
+   &o_vhf2 = 0
+   &o_sel = 0
+  }
+}
+
+var 104, name ent_com2
+
+var 106, name dec_com2
+
+var 108, name ie_dec_com2, link IOCARD_ENCODER, input 0, type 2, aceleration 1, device 0
+{
+  if &enc_com2 = 1
+  {
+    l0 = &ie_dec_com2 * 25
+    l1 = &dec_com2 + l0
+    if l1 < 0
+    {
+      l1 = 975
+    }
+    if l1 > 975
+    {
+      l1 = 0
+    }
+    &dec_com2 = l1
+    call &sub_d_com2
+  }
+}
+
+var 110, name ie_ent_com2, link IOCARD_ENCODER, input 2, type 2, aceleration 1, device 0
+{
+  if &enc_com2 = 1
+  {
+    l0 = &ie_ent_com2 * -1
+    &ent_com2 = rotate 118,135,l0
+    call &sub_d_com2
+  }
+}
+
+var 112, name id_com2,link IOCARD_DISPLAY, digit 6, numbers 6, device 0
+
+var 114, name sub_d_com2, link SUBRUTINE
+{
+  l0 = &ent_com2 * 1000
+  &id_com2 = l0 + &dec_com2
+}
+
+var 116, name io_pt_com2, link IOCARD_OUT, output 21, device 0
+
+var 118, name ii_sw_com2, link IOCARD_SW, input 4, device 0
+{
+  if &ii_sw_com2 = 1
+  {
+    if &enc_com2 = 1
+    {
+      l0 = &ent_com2 * 1000
+      l0 = l0 + &dec_com2
+      l1 = div &act_com2 1000
+      l2 = mod &act_com2 1000
+      &act_com2 = l0
+      &ent_com2 = l1
+      &dec_com2 = l2
+      call &sub_d_com2
+      &id2_com2 = &act_com2 
+    }
+  }
+}
+
+var 120, name act_com2
+
+var 122, name id2_com2,link IOCARD_DISPLAY, digit 0, numbers 6, device 0
+{
+  if &id2_com2 > 0
+  {
+    &xp_com2 = div &id2_com2 10
+  }
+}
+
+
+var 124, name io_pt2_com2, link IOCARD_OUT, output 23, device 0
+
+var 126, name xp_com2, value 11800
+{
+  l0 = &xp_com2 - 10000
+  &fcom2 = tobcd l0
+}
+
+
+Var 128, name o_vhf2, Link IOCARD_OUT, Output 25, device 0
+
+Var 130, name o_sel, Link IOCARD_OUT, Output 26, device 0
+
+
+// ********* OFFSETS ****
+
+Var 252, Link FSUIPC_INOUT, name fcom2, Offset $3118, Length 2 // COM2 Active 
+
+
+// *******************  NAV2 *******************
+
+var 154, name enc_nav2
+{
+  if &enc_nav2 = 1
+  {
+    &io_pt_nav2 = 1
+    &io_pt2_nav2 = 1
+    &id2_nav2 = &act_nav2
+    &o_nav = 1
+    &o_ils = 1
+    if &scourse2 = 0
+    {
+      &scourse2 = 1
+    }
+    else
+    {
+      &scourse2 = 0
+      call &sub_d_nav2
+    }   
+  }
+  else
+  {
+    &scourse2 = 0
+    &io_pt_nav2 = 0
+    &io_pt2_nav2 = 0
+    &id_nav2 = -999999
+    &id2_nav2 = -999999
+    &o_nav = 0
+    &o_ils = 0
+  }
+}
+
+
+
+
+
+
+var 156, name ent_nav2
+
+var 158, name dec_nav2
+
+var 160, name ie_dec_nav2, link IOCARD_ENCODER, input 0, type 2, aceleration 1, device 0
+{
+  if &enc_nav2 = 1
+  {
+    if &scourse2 = 0
+    {
+      l0 = &ie_dec_nav2 * 25
+      l1 = &dec_nav2 + l0
+      if l1 < 0
+      {
+        l1 = 975
+      }
+      if l1 > 975
+      {
+        l1 = 0
+      }
+      &dec_nav2 = l1
+      call &sub_d_nav2
+    }
+  }
+}
+
+var 162, name ie_ent_nav2, link IOCARD_ENCODER, input 2, type 2, aceleration 1, device 0
+{
+  if &enc_nav2 = 1
+  {
+    if &scourse2 = 1
+    {
+
+    }
+    else  
+    { 
+      l0 = &ie_ent_nav2 * -1
+      &ent_nav2 = rotate 108,117,l0
+      call &sub_d_nav2
+    }
+  }
+}
+
+var 163, name ie_ent_nav2b, link IOCARD_ENCODER, input 2, type 2, aceleration 8, device 0
+{
+  if &enc_nav2 = 1
+  {
+    if &scourse2 = 1
+    {
+      l0 = &ie_ent_nav2b * -1
+      &dcourse2 = rotate 0,359,l0
+    }
+    else  
+    { 
+    }
+  }
+}
+
+
+var 164, name id_nav2,link IOCARD_DISPLAY, digit 6, numbers 5, device 0
+
+var 166, name sub_d_nav2, link SUBRUTINE
+{
+  l0 = &ent_nav2 * 100
+  l1 = div &dec_nav2 10
+  &id_nav2 = l0 + l1
+}
+
+var 168, name io_pt_nav2, link IOCARD_OUT, output 20, device 0
+
+var 170, name ii_sw_nav2, link IOCARD_SW, input 4, device 0
+{
+  if &ii_sw_nav2 = 1
+  {
+    if &enc_nav2 = 1
+    {
+      if &scourse2 = 1
+      {
+        &course2 = &dcourse2
+        &scourse2 = 0
+    	&id_nav2 = &act_nav2
+        l2 = mod &act_nav2 100
+        l0 = mod l2 10
+        l2 = l2 * 10
+        if l0 > 0
+        {
+          l2 = l2 + 5
+        }
+        &dec_nav2 = l2
+        l1 = div &act_nav2 100
+        &ent_nav2 = l1 
+      }
+      else
+      {
+        l0 = &ent_nav2 * 100
+        l1 = div &dec_nav2 10     
+        l0 = l0 + l1
+        &act_nav2 = l0
+        &id2_nav2 = &act_nav2
+        &id_nav2 = -999999
+        &scourse2 = 1
+      }
+    }
+  }
+}
+
+
+var 172, name act_nav2
+
+var 174, name id2_nav2,link IOCARD_DISPLAY, digit 0, numbers 5, device 0
+{
+  if &id2_nav2 > 0
+  {
+    &xp_nav2 = &id2_nav2
+  }
+}
+
+var 176, name io_pt2_nav2, link IOCARD_OUT, output 22, device 0
+
+var 178, name xp_nav2
+{
+  l0 = &xp_nav2 - 10000
+  &fnav2 = tobcd l0
+}
+
+Var 180, name o_ils, Link IOCARD_OUT, Output 27, device 0
+
+// ********* OFFSETS ****
+
+Var 253, Link FSUIPC_INOUT, name fnav2, Offset $0352, Length 2 // NAV2 Active 
+{
+  l0 = frombcd &fnav2
+  &act_nav2 = l0 + 10000
+  if &enc_nav2 = 1
+  {
+    &id2_nav2 = &act_nav2
+  }
+}
+
+
+// *******************  ADF1 *******************
+
+var 218, name enc_adf1
+{
+  if &enc_adf1 = 1
+  {
+   &io_pt_nav2 = 1
+   &io_pt2_nav2 = 1
+   call &sub_d_adf1
+   &id2_adf1 = &act_adf1
+   &o_nav = 1
+   &o_adf = 1
+
+  }
+  else
+  {
+   &io_pt_nav2 = 0
+   &io_pt2_nav2 = 0
+   &id_adf1 = -999999
+   &id2_adf1 = -999999
+   &o_nav = 0
+   &o_adf = 0
+  }
+}
+
+var 220, name ent_adf1
+
+var 222, name dec_adf1
+
+var 224, name ie_dec_adf1, link IOCARD_ENCODER, input 0, type 2, aceleration 5, device 0
+{
+  if &enc_adf1 = 1
+  {
+    l0 = &ie_dec_adf1 * 1
+    l1 = &dec_adf1 + l0
+    if l1 < 0
+    {
+      l1 = 99
+    }
+    if l1 > 99
+    {
+      l1 = 0
+    }
+    &dec_adf1 = l1
+    call &sub_d_adf1
+  }
+}
+
+var 226, name ie_ent_adf1, link IOCARD_ENCODER, input 2, type 2, aceleration 4, device 0
+{
+  if &enc_adf1 = 1
+  {
+    l0 = &ie_ent_adf1 * -1
+    l1 = &ent_adf1 + l0
+    if l1 < 10
+    {
+      l1 = 179
+    }
+    if l1 > 179
+    {
+      l1 = 10
+    }
+    &ent_adf1 = l1
+    call &sub_d_adf1
+  }
+}
+
+var 228, name id_adf1,link IOCARD_DISPLAY, digit 7, numbers 5, device 0
+
+var 230, name sub_d_adf1, link SUBRUTINE
+{
+  l0 = &ent_adf1 * 100
+  l1 = &dec_adf1 
+  &id_adf1 = l0 + l1
+}
+
+//var 232, name io_pt_nav1, link IOCARD_OUT, output 19
+
+var 234, name ii_sw_adf1, link IOCARD_SW, input 4,device 0
+{
+  if &ii_sw_adf1 = 1
+  {
+    if &enc_adf1 = 1
+    {
+      l0 = &ent_adf1 * 100
+      l1 = &dec_adf1
+      l0 = l0 + l1
+      l1 = div &act_adf1 100
+      l2 = mod &act_adf1 100
+      &act_adf1 = l0
+      &ent_adf1 = l1 
+      &dec_adf1 = l2
+      call &sub_d_adf1
+      &id2_adf1 = &act_adf1 
+    }
+  }
+}
+
+var 236, name act_adf1
+
+var 238, name id2_adf1,link IOCARD_DISPLAY, digit 1, numbers 5, device 0
+{
+  if &id2_adf1 > 0
+  {
+    
+    &xp_adf1 = &id2_adf1
+  }
+}
+
+//var 240, name io_pt2_nav1, link IOCARD_OUT, output 20
+
+Var 242, name o_adf, Link IOCARD_OUT, Output 28, device 0
+
+
+var 254, name xp_adf1
+{
+  l0 = div &xp_adf1 10000
+  l2 = l0 * 10000
+  l2 = &xp_adf1 - l2
+  l1 = div l2 10
+  l0 = l0 * 100
+  l2 = div &xp_adf1 10
+  l2 = l2 * 10
+  l2 = &xp_adf1 - l2
+  l2 = l2 + l0
+  &fadf1A = tobcd l1
+  &fadf1B = tobcd l2
+}
+
+// ********* OFFSETS ****
+
+Var 256, Link FSUIPC_INOUT, name fadf1A, Offset $034c, Length 2 // ADF1 Active part1 
+{
+  call &decode_adf
+}
+
+Var 258, Link FSUIPC_INOUT, name fadf1B, Offset $0356, Length 2 // ADF1 Active part2
+{
+  call &decode_adf
+}
+
+Var 260, Link FSUIPC_INOUT, name course1, Offset $0C4E, Length 2     // COURSE
+
+Var 262, Link FSUIPC_INOUT, name course2, Offset $0C5E, Length 2     // COURSE 2
+
+Var 270, link SUBRUTINE, name decode_adf
+{
+  l0 = frombcd &fadf1A
+  l0 = l0 * 10
+  l1 = frombcd &fadf1B
+  l2 = mod l1 100
+  l0 = l0 + l2
+  l2 = div l1 100
+  l2 = l2 * 10000
+  &act_adf1 = l0 + l2
+  if &enc_adf1 = 1
+  {
+    &id2_adf1 = &act_adf1
+  }
+}

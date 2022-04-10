@@ -1,0 +1,287 @@
+Var 0066, name CDU1, Link IOCARD_KEYS, Device 13     // FMC/CDU1_CAPT
+{
+  IF &CDU1 = 56     // l1
+  {   
+	&fmcButtons = TOGGLE 1
+  }
+  IF &CDU1 = 64     // l2
+  {   
+	&fmcButtons = TOGGLE 2
+  }
+  IF &CDU1 = 72     // l3
+  {   
+	&fmcButtons = TOGGLE 3
+  }
+  IF &CDU1 = 80     // l4
+  {   
+	&fmcButtons = TOGGLE 4
+  }
+  IF &CDU1 = 88     // l5
+  {   
+	&fmcButtons = TOGGLE 5
+  }
+  IF &CDU1 = 87     // l6
+  {   
+	&fmcButtons = TOGGLE 6
+  }
+  IF &CDU1 = 86     // r1
+  {   
+	&fmcButtons = TOGGLE 7
+  }
+  IF &CDU1 = 85     // r2
+  {   
+	&fmcButtons = TOGGLE 8
+  }
+  IF &CDU1 = 84     // r3
+  {   
+	&fmcButtons = TOGGLE 9
+  }
+  IF &CDU1 = 83     // r4
+  {   
+	&fmcButtons = TOGGLE 10
+  }
+  IF &CDU1 = 74     // r5
+  {   
+	&fmcButtons = TOGGLE 11
+  }
+  IF &CDU1 = 82     // r6
+  {   
+	&fmcButtons = TOGGLE 12
+  }
+  IF &CDU1 = 79     // dir
+  {   
+	&fmcButtons = TOGGLE 13
+  }
+  IF &CDU1 = 78     // prog
+  {   
+	&fmcButtons = TOGGLE 14
+  }
+  IF &CDU1 = 77     // perf
+  {   
+	&fmcButtons = TOGGLE 15
+  }
+  IF &CDU1 = 76     // init
+  {   
+	&fmcButtons = TOGGLE 16
+  }
+  IF &CDU1 = 75     // data
+  {   
+	&fmcButtons = TOGGLE 17
+  }
+  IF &CDU1 = 71     // fpln
+  {   
+	&fmcButtons = TOGGLE 18
+  }
+  IF &CDU1 = 70     // radnav
+  {   
+	&fmcButtons = TOGGLE 19
+  }
+  IF &CDU1 = 69     // fuel
+  {   
+	&fmcButtons = TOGGLE 20
+  }
+  IF &CDU1 = 68     // sec fpln
+  {   
+	&fmcButtons = TOGGLE 21
+  }
+  IF &CDU1 = 67     // atc
+  {   
+	&fmcButtons = TOGGLE 22
+  }
+  IF &CDU1 = 66     // mcdu menu
+  {   
+	&fmcButtons = TOGGLE 23
+  }
+  IF &CDU1 = 65     // airport
+  {   
+	&fmcButtons = TOGGLE 24
+  }
+  IF &CDU1 = 63     // left
+  {   
+	&fmcButtons = TOGGLE 25
+  }
+  IF &CDU1 = 55     // right
+  {   
+	&fmcButtons = TOGGLE 26
+  }
+  IF &CDU1 = 62     // up
+  {   
+	&fmcButtons = TOGGLE 27
+  }
+  IF &CDU1 = 54     // down
+  {   
+	&fmcButtons = TOGGLE 28
+  }
+  IF &CDU1 = 32     // 1
+  {   
+	&fmcButtons = TOGGLE 29
+  }
+  IF &CDU1 = 31     // 2
+  {   
+	&fmcButtons = TOGGLE 30
+  }
+  IF &CDU1 = 30     // 3
+  {   
+	&fmcButtons = TOGGLE 31
+  }
+  IF &CDU1 = 24     // 4
+  {   
+	&fmcButtons = TOGGLE 32
+  }
+  IF &CDU1 = 23     // 5
+  {   
+	&fmcButtons2 = TOGGLE 1
+  }
+  IF &CDU1 = 22     // 6
+  {   
+	&fmcButtons2 = TOGGLE 2
+  }
+  IF &CDU1 = 16     // 7
+  {   
+	&fmcButtons2 = TOGGLE 3
+  }
+  IF &CDU1 = 15     // 8
+  {   
+	&fmcButtons2 = TOGGLE 4
+  }
+  IF &CDU1 = 14     // 9
+  {   
+	&fmcButtons2 = TOGGLE 5
+  }
+  IF &CDU1 = 8     // .
+  {   
+	&fmcButtons2 = TOGGLE 6
+  }
+  IF &CDU1 = 7     // 0
+  {   
+	&fmcButtons2 = TOGGLE 7
+  }
+  IF &CDU1 = 6     // +-
+  {   
+	&fmcButtons2 = TOGGLE 8
+  }
+  IF &CDU1 = 61     // a
+  {   
+	&fmcButtons2 = TOGGLE 9
+  }
+  IF &CDU1 = 60     // b
+  {   
+	&fmcButtons2 = TOGGLE 10
+  }
+  IF &CDU1 = 59     // c
+  {   
+	&fmcButtons2 = TOGGLE 11
+  }
+  IF &CDU1 = 58     // d
+  {   
+	&fmcButtons2 = TOGGLE 12
+  }
+  IF &CDU1 = 57     // e
+  {   
+	&fmcButtons2 = TOGGLE 13
+  }
+  IF &CDU1 = 53     // f
+  {   
+	&fmcButtons2 = TOGGLE 14
+  }
+  IF &CDU1 = 52     // g
+  {   
+	&fmcButtons2 = TOGGLE 15
+  }
+  IF &CDU1 = 51     // h
+  {   
+	&fmcButtons2 = TOGGLE 16
+  }
+  IF &CDU1 = 50     // i
+  {   
+	&fmcButtons2 = TOGGLE 17
+  }
+  IF &CDU1 = 49     // j
+  {   
+	&fmcButtons2 = TOGGLE 18
+  }
+  IF &CDU1 = 29     // k
+  {   
+	&fmcButtons2 = TOGGLE 19
+  }
+  IF &CDU1 = 28     // l
+  {   
+	&fmcButtons2 = TOGGLE 20
+  }
+  IF &CDU1 = 27     // m
+  {   
+	&fmcButtons2 = TOGGLE 21
+  }
+  IF &CDU1 = 26     // n
+  {   
+	&fmcButtons2 = TOGGLE 22
+  }
+  IF &CDU1 = 25     // o
+  {   
+	&fmcButtons2 = TOGGLE 23
+  }
+  IF &CDU1 = 21     // p
+  {   
+	&fmcButtons2 = TOGGLE 24
+  }
+  IF &CDU1 = 20     // q
+  {   
+	&fmcButtons2 = TOGGLE 25
+  }
+  IF &CDU1 = 19     // r
+  {   
+	&fmcButtons2 = TOGGLE 26
+  }
+  IF &CDU1 = 18     // s
+  {   
+	&fmcButtons2 = TOGGLE 27
+  }
+  IF &CDU1 = 17     // t
+  {   
+	&fmcButtons2 = TOGGLE 28
+  }
+  IF &CDU1 = 13     // u
+  {   
+	&fmcButtons2 = TOGGLE 29
+  }
+  IF &CDU1 = 12     // v
+  {   
+	&fmcButtons2 = TOGGLE 30
+  }
+  IF &CDU1 = 11     // w
+  {   
+	&fmcButtons2 = TOGGLE 31
+  }
+  IF &CDU1 = 10     // x
+  {   
+	&fmcButtons2 = TOGGLE 32
+  }
+  IF &CDU1 = 9     // y
+  {   
+	&fmcButtons3 = TOGGLE 1
+  }
+  IF &CDU1 = 5     // z
+  {   
+	&fmcButtons3 = TOGGLE 2
+  }
+  IF &CDU1 = 4     // /
+  {   
+	&fmcButtons3 = TOGGLE 3
+  }
+  IF &CDU1 = 3     // SP
+  {   
+	&fmcButtons3 = TOGGLE 4
+  }
+  IF &CDU1 = 2     // ovfy
+  {   
+	&fmcButtons3 = TOGGLE 5
+  }
+  IF &CDU1 = 1     // clr
+  {   
+	&fmcButtons3 = TOGGLE 6
+  }
+}
+
+Var 1 name fmcButtons Link FSUIPC_OUT Offset $3340 Length 4 // 1-32 buttons
+Var 2 name fmcButtons2 Link FSUIPC_OUT Offset $3344 Length 4 // 1-32 buttons
+Var 3 name fmcButtons3 Link FSUIPC_OUT Offset $3348 Length 4 // 1-32 buttons
